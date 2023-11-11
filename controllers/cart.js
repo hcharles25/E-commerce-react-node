@@ -124,38 +124,6 @@ exports.removeProductFromCart = async (req, res) => {
 };
 
 /**
- * @desc   Get cart
- * @route  GET /api/users/cart/
- * @access Private
- */
-exports.loadCart = async (req, res) => {
-  try {
-    const userId = req.user.userId;
-
-    const user = await User.findById(userId)
-      .select("-password")
-      .sort({ _id: 1 });
-
-    //Combine and match cart data with images
-    const cart = user.cart;
-    const result = await mergeCartAndProduct(cart);
-
-    res.status(200).json({
-      success: true,
-      cart: result,
-    });
-    console.log("Cart: Load cart success".green);
-    return;
-  } catch (err) {
-    console.log(`Cart: Load cart fail Msg:${err.message}`.red);
-    res.status(400).json({
-      success: false,
-      error: err.message,
-    });
-  }
-};
-
-/**
  * @desc   Update product quantity in cart
  * @route  GET /api/users/cart/update?productId={productId}&quantity={quantity}
  * @access Private
@@ -198,6 +166,38 @@ exports.updateProductInCart = async (req, res) => {
   }
 };
 
+/**
+ * @desc   Get cart
+ * @route  GET /api/users/cart/
+ * @access Private
+ */
+exports.loadCart = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const user = await User.findById(userId)
+      .select("-password")
+      .sort({ _id: 1 });
+
+    //Combine and match cart data with images
+    const cart = user.cart;
+    const result = await mergeCartAndProduct(cart);
+
+    res.status(200).json({
+      success: true,
+      cart: result,
+    });
+    console.log("Cart: Load cart success".green);
+    return;
+  } catch (err) {
+    console.log(`Cart: Load cart fail Msg:${err.message}`.red);
+    res.status(400).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+ 
 /**
  * @desc   Payment
  * @route  POST /api/users/cart/payment
