@@ -2,16 +2,6 @@ const Product = require("../models/Products");
 const User = require("../models/Users");
 const multer = require("multer");
 const path = require("path");
-// Set Storage Engine
-const storage = multer.diskStorage({
-  destination: "./public/uploads/",
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
 
 // Init Upload
 const upload = multer({
@@ -22,6 +12,16 @@ const upload = multer({
   },
 }).array("image", 3);
 
+// Set Storage Engine
+const storage = multer.diskStorage({
+  destination: "./public/uploads/",
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+}); 
 // Check File Type
 function checkFileType(file, cb) {
   // Allowed ext
